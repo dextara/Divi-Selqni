@@ -68,23 +68,54 @@ function closeModal() {
 }
 
 
-// ===== AUTH SYSTEM =====
-function openAuth() {
+let currentUser = null;
+
+// Проверка дали има логнат потребител
+window.onAuthStateChanged(window.auth, async (user) => {
+    const authBtn = document.getElementById("auth-button");
+
+    if (user) {
+        currentUser = user;
+        authBtn.innerText = "PROFILE";
+    } else {
+        currentUser = null;
+        authBtn.innerText = "REGISTER";
+    }
+});
+
+function handleAuthClick() {
+    if (currentUser) {
+        showProfile(currentUser.uid);
+    } else {
+        openRegister();
+    }
+}
+
+function openRegister() {
     document.getElementById('modal-body').innerHTML = `
-        <h2>LOGIN / REGISTER</h2>
+        <h2>REGISTER</h2>
         <input id="email" placeholder="Email">
         <input id="password" type="password" placeholder="Password">
-        <input id="username" placeholder="Username (register only)">
+        <input id="username" placeholder="Username">
         <button onclick="register()">Register</button>
-        <button onclick="login()">Login</button>
+        <p style="margin-top:10px;cursor:pointer;color:#888;" onclick="openLogin()">Already have account? Login</p>
     `;
     document.getElementById('modal-overlay').style.display = 'flex';
 }
 
+function openLogin() {
+    document.getElementById('modal-body').innerHTML = `
+        <h2>LOGIN</h2>
+        <input id="email" placeholder="Email">
+        <input id="password" type="password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    `;
+}
+
 async function register() {
-    const email = emailInput();
-    const password = passwordInput();
-    const username = usernameInput();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const username = document.getElementById("username").value;
 
     try {
         const userCredential = await window.createUserWithEmailAndPassword(window.auth, email, password);
@@ -103,8 +134,8 @@ async function register() {
 }
 
 async function login() {
-    const email = emailInput();
-    const password = passwordInput();
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
     try {
         const userCredential = await window.signInWithEmailAndPassword(window.auth, email, password);
@@ -120,12 +151,14 @@ async function showProfile(uid) {
 
     if (docSnap.exists()) {
         const data = docSnap.data();
+
         document.getElementById('modal-body').innerHTML = `
             <h2>PROFILE</h2>
             <p><strong>Username:</strong> ${data.username}</p>
             <p><strong>Email:</strong> ${data.email}</p>
             <button onclick="logout()">Logout</button>
         `;
+        document.getElementById('modal-overlay').style.display = 'flex';
     }
 }
 
@@ -133,9 +166,3 @@ function logout() {
     window.signOut(window.auth);
     closeModal();
 }
-
-
-// Helpers
-function emailInput() { return document.getElementById('email').value; }
-function passwordInput() { return document.getElementById('password').value; }
-function usernameInput() { return document.getElementById('username').value; }
