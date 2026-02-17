@@ -20,7 +20,7 @@ const firebaseConfig = {
     projectId: "divi-selqni",
     storageBucket: "divi-selqni.firebasestorage.app",
     messagingSenderId: "222297927821",
-    appId: "1:222297927821:web:59232ddc48c644642f72c4   "
+    appId: "1:222297927821:web:59232ddc48c644642f72c4"
 };
 
 const app = initializeApp(firebaseConfig);
