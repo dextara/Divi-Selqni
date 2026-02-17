@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="bg">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Divi Selqni | Galaxy Space</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" type="image/png" href="https://cdn.discordapp.com/attachments/1257634875956007004/1473350797197840655/image.png?ex=6995e45b&is=699492db&hm=8d3cab2f878df8f83929d4123e90a3969eca84a9885539f2b95eb5a4c056182c&">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@300;400;600&display=swap"
+        rel="stylesheet">
 </head>
+
 <body>
 
     <canvas id="canvas-stars"></canvas>
@@ -17,13 +20,14 @@
             <div class="nav-link" onclick="openModal('shop')">🛒 КУПИ</div>
             <div class="nav-link" onclick="openModal('rules')">📜 ПРАВИЛА</div>
             <div class="nav-link" onclick="openModal('links')">🔗 ВРЪЗКИ</div>
+            <div class="nav-link" onclick="openAuth()">👤 ПРОФИЛ</div>
         </div>
     </header>
 
     <main class="hero">
         <h1 class="logo-text">DIVI SELQNI</h1>
-        <p style="color: #888; letter-spacing: 2px; margin-bottom: 40px;">NAI-DOBROTO COMUNITY</p>
-        
+        <p class="subtitle">NAI-DOBROTO COMMUNITY</p>
+
         <a href="https://discord.gg/tzsCX674x4" target="_blank" class="discord-btn">
             🚀 JOIN DISCORD
         </a>
@@ -32,14 +36,18 @@
     <div id="modal-overlay" class="overlay">
         <div class="modal-content">
             <div id="modal-body"></div>
-            <button onclick="closeModal()" style="margin-top:20px; background:none; border:1px solid #444; color:#888; cursor:pointer; padding:5px 15px; border-radius:5px;">Затвори</button>
+            <button onclick="closeModal()" class="close-btn">Затвори</button>
         </div>
     </div>
 
+    <footer class="site-patent">
+        © 2026 Divi Selqni Community | Всички права запазени
+    </footer>
+
+    <!-- Firebase -->
+    <script type="module" src="firebase.js"></script>
     <script src="script.js"></script>
-     
-<footer class="site-patent">
-    © 2026 Divi Selqni Community | Всички права запазени
-</footer>
+
 </body>
+
 </html>

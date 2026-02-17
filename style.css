@@ -201,3 +201,39 @@ header {
         opacity: 1;
     }
 }
+.subtitle {
+    color: #888;
+    letter-spacing: 2px;
+    margin-bottom: 40px;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0;
+    background: #111;
+    border: 1px solid var(--primary);
+    color: white;
+    border-radius: 8px;
+}
+
+button {
+    background: var(--primary);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    color: white;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.close-btn {
+    background: transparent;
+    border: 1px solid #444;
+    color: #aaa;
+}
