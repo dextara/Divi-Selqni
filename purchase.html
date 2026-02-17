@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Store - Shortcut</title>
+    <style>
+        :root{--bg:#000;--navy:#071a2a;--card:#081827;--accent:#0b63ff;--muted:#9aa6b2;--glass:rgba(255,255,255,0.03)}
+        *{box-sizing:border-box}
+        html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,var(--bg),var(--navy));color:#e6eef6}
+        .app{max-width:980px;margin:28px auto;padding:18px}
+        .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+        .back-btn{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:8px 12px;border-radius:8px;cursor:pointer}
+        h1{margin:0;font-size:1.3rem}
+        .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+        .card{background:linear-gradient(180deg,var(--card),rgba(8,24,39,0.6));padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03)}
+        .thumb{height:110px;border-radius:8px;background:linear-gradient(135deg,var(--navy),#00101a);display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:700;font-size:1.05rem;margin-bottom:10px}
+        .meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+        .price{color:var(--accent);font-weight:700}
+        .buy{background:var(--accent);border:none;color:#fff;padding:8px 12px;border-radius:8px;cursor:pointer;font-weight:600}
+        .muted{color:var(--muted);font-size:0.92rem}
+        .view{display:none}
+        .view.active{display:block}
+
+        /* checkout */
+        .checkout{max-width:640px;margin:0 auto;background:linear-gradient(180deg,#071a2a,#04121a);padding:18px;border-radius:10px;border:1px solid rgba(255,255,255,0.04)}
+        .form-row{display:flex;gap:10px;margin-top:12px}
+        .form-row input,.form-row select,textarea{flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.06);background:var(--glass);color:inherit}
+        .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:14px}
+        .btn-secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);padding:8px 12px;border-radius:8px;cursor:pointer}
+        .confirm{background:var(--accent);color:#fff;border:none;padding:9px 14px;border-radius:8px;cursor:pointer}
+        #toast{position:fixed;right:18px;bottom:18px;background:#04121a;padding:12px 14px;border-radius:10px;border:1px solid rgba(11,99,255,0.12);display:none;color:#dff0ff;z-index:60}
+
+        @media (max-width:420px){.form-row{flex-direction:column}}
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="topbar">
+            <button id="backBtn" class="back-btn" title="Back (Ctrl+B)">Back</button>
+            <div>
+                <h1>Purchase Store</h1>
+                <div class="muted" style="text-align:right;font-size:0.9rem">Press <strong>Ctrl+B</strong> to go back</div>
+            </div>
+            <div class="muted">Cart: <span id="cart-count">0</span></div>
+        </div>
+
+        <!-- Store view -->
+        <div id="storeView" class="view active">
+            <section class="grid" id="products">
+                <div class="card" data-id="1" data-name="Aurora Headphones" data-price="79.99">
+                    <div class="thumb">Aurora</div>
+                    <div class="meta"><div>Wireless headphones</div><div class="price">$79.99</div></div>
+                    <div class="muted">High-quality sound with noise reduction.</div>
+                    <div style="margin-top:10px;text-align:right"><button class="buy" data-id="1">Buy</button></div>
+                </div>
+
+                <div class="card" data-id="2" data-name="Nebula Lamp" data-price="49.50">
+                    <div class="thumb">Nebula</div>
+                    <div class="meta"><div>Ambient lamp</div><div class="price">$49.50</div></div>
+                    <div class="muted">Create a calm, blue-lit atmosphere.</div>
+                    <div style="margin-top:10px;text-align:right"><button class="buy" data-id="2">Buy</button></div>
+                </div>
+
+                <div class="card" data-id="3" data-name="Midnight Backpack" data-price="64.00">
+                    <div class="thumb">Backpack</div>
+                    <div class="meta"><div>Urban carry</div><div class="price">$64.00</div></div>
+                    <div class="muted">Water-resistant, sleek design.</div>
+                    <div style="margin-top:10px;text-align:right"><button class="buy" data-id="3">Buy</button></div>
+                </div>
+
+                <div class="card" data-id="4" data-name="Luna Mug" data-price="15.25">
+                    <div class="thumb">Luna</div>
+                    <div class="meta"><div>Ceramic mug</div><div class="price">$15.25</div></div>
+                    <div class="muted">Keeps drinks warm with a glossy finish.</div>
+                    <div style="margin-top:10px;text-align:right"><button class="buy" data-id="4">Buy</button></div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Checkout view (separate page in single file) -->
+        <div id="checkoutView" class="view">
+            <div class="checkout">
+                <!-- form posts to purchase.php -->
+                <form id="purchaseForm" action="purchase.php" method="post">
+                    <input type="hidden" name="id" id="form-id" value="" />
+                    <input type="hidden" name="name" id="form-name" value="" />
+                    <input type="hidden" name="price" id="form-price" value="" />
+                    <input type="hidden" name="qty" id="form-qty" value="1" />
+                    <input type="hidden" name="place" id="form-place" value="" />
+                </form>
+                <h2 id="checkout-title">Buy Item</h2>
+                <div class="muted" id="product-desc">Item details</div>
+                <div class="form-row">
+                    <label style="min-width:90px;color:var(--muted);align-self:center">Quantity</label>
+                    <select id="qty"><option>1</option><option>2</option><option>3</option><option>4</option></select>
+                </div>
+                <div class="form-row">
+                    <label style="min-width:90px;color:var(--muted);align-self:center">Place</label>
+                    <input id="place" placeholder="Where should we send it? (address or place)" />
+                </div>
+                <div class="muted" id="total-note" style="margin-top:10px">Total: $0.00</div>
+
+                <div class="actions">
+                    <button class="btn-secondary" id="cancel">Cancel</button>
+                    <button class="confirm" id="confirm">Confirm Purchase</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast"></div>
+
+    <script>
+        // Elements
+        const backBtn = document.getElementById('backBtn');
+        const storeView = document.getElementById('storeView');
+        const checkoutView = document.getElementById('checkoutView');
+        const buys = document.querySelectorAll('.buy');
+        const productDesc = document.getElementById('product-desc');
+        const qtyEl = document.getElementById('qty');
+        const placeEl = document.getElementById('place');
+        const totalNote = document.getElementById('total-note');
+        const confirmBtn = document.getElementById('confirm');
+        const cancelBtn = document.getElementById('cancel');
+        const toast = document.getElementById('toast');
+        const cartCount = document.getElementById('cart-count');
+
+        let current = null;
+
+        function showView(view){
+            document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+            view.classList.add('active');
+        }
+
+        function openCheckout(card){
+            const id = card.getAttribute('data-id');
+            const name = card.getAttribute('data-name');
+            const price = parseFloat(card.getAttribute('data-price'))||0;
+            current = {id,name,price};
+            productDesc.textContent = `${name} — $${price.toFixed(2)}`;
+            qtyEl.value = '1'; placeEl.value = '';
+            updateTotal();
+            // push state so Back/Ctrl+B work
+            history.pushState({view:'checkout',id}, '', `#buy-${id}`);
+            showView(checkoutView);
+            placeEl.focus();
+        }
+
+        function updateTotal(){
+            const q = parseInt(qtyEl.value||1,10);
+            const total = (current?.price||0) * q;
+            totalNote.textContent = `Total: $${total.toFixed(2)}`;
+        }
+
+        buys.forEach(b=>b.addEventListener('click', e=>{
+            const id = e.currentTarget.getAttribute('data-id');
+            const card = document.querySelector(`.card[data-id="${id}"]`);
+            if(card) openCheckout(card);
+        }));
+
+        cancelBtn.addEventListener('click', ()=>{
+            // navigate back to store
+            if(history.state && history.state.view==='checkout') history.back(); else showView(storeView);
+        });
+
+        confirmBtn.addEventListener('click', ()=>{
+            const q = parseInt(qtyEl.value||1,10);
+            const place = placeEl.value.trim();
+            if(!place){ placeEl.focus(); placeEl.style.outline='2px solid rgba(11,99,255,0.3)'; setTimeout(()=>placeEl.style.outline='none',900); return; }
+            // set form values and submit to server-side PHP
+            document.getElementById('form-id').value = current.id || '';
+            document.getElementById('form-name').value = current.name || '';
+            document.getElementById('form-price').value = (current.price||0).toFixed(2);
+            document.getElementById('form-qty').value = q;
+            document.getElementById('form-place').value = place;
+            // optional visual increment before navigating
+            cartCount.textContent = parseInt(cartCount.textContent||'0',10) + q;
+            // submit form to purchase.php (will navigate)
+            document.getElementById('purchaseForm').submit();
+        });
+
+        qtyEl.addEventListener('change', updateTotal);
+
+        // Back button and shortcut
+        backBtn.addEventListener('click', ()=>{
+            if(history.length>1) history.back(); else window.close();
+        });
+
+        document.addEventListener('keydown', (e)=>{
+            if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='b'){
+                e.preventDefault();
+                if(history.length>1) history.back(); else window.close();
+            }
+        });
+
+        // Handle browser back/forward
+        window.addEventListener('popstate', (e)=>{
+            const state = e.state || {};
+            if(state.view === 'checkout'){
+                // find card
+                const card = document.querySelector(`.card[data-id="${state.id}"]`);
+                if(card) {
+                    // reopen checkout without pushing state
+                    const name = card.getAttribute('data-name');
+                    const price = parseFloat(card.getAttribute('data-price'))||0;
+                    current = {id:state.id,name,price};
+                    productDesc.textContent = `${name} — $${price.toFixed(2)}`;
+                    showView(checkoutView);
+                } else showView(storeView);
+            } else {
+                showView(storeView);
+            }
+        });
+
+        function showToast(msg){
+            toast.textContent = msg; toast.style.display='block';
+            setTimeout(()=>toast.style.display='none',4200);
+        }
+
+        // If user opens with #buy-<id>, initialize checkout
+        (function initFromHash(){
+            if(location.hash.startsWith('#buy-')){
+                const id = location.hash.split('#buy-')[1];
+                const card = document.querySelector(`.card[data-id="${id}"]`);
+                if(card){ history.replaceState({}, '', location.hash); openCheckout(card); }
+            }
+        })();
+    </script>
+</body>
+</html>

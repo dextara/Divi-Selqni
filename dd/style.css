@@ -1,0 +1,14 @@
+.site-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.4); /* Полупрозрачно бяло */
+    background: rgba(0, 0, 0, 0.2); /* Леко затъмнен фон за четливост */
+    backdrop-filter: blur(5px);
+    z-index: 100; /* Да е над звездите */
+    letter-spacing: 1px;
+    font-family: 'Poppins', sans-serif;
+}

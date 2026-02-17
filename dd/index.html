@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divi Selqni | Galaxy Space</title>
+    <link rel="icon" type="image/png" href="https://cdn.discordapp.com/attachments/1257634875956007004/1473350797197840655/image.png?ex=6995e45b&is=699492db&hm=8d3cab2f878df8f83929d4123e90a3969eca84a9885539f2b95eb5a4c056182c&">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- CSS: СТИЛИЗИРАНЕ И ГАЛАКТИЧЕСКИ ЕФЕКТИ --- */
+        :root {
+            --primary: #5865F2; /* Discord цвят */
+            --accent: #ff0055;  /* Неоново розово за акцент */
+            --galaxy-dark: #020205;
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            background-color: var(--galaxy-dark);
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            overflow: hidden;
+            cursor: crosshair; /* Променя мишката на мерник за геймърско усещане */
+        }
+
+        /* Анимиран Фон */
+        #canvas-stars {
+            position: fixed;
+            top: 0; left: 0;
+            z-index: 0;
+        }
+
+        /* Навигация (Горе) */
+        header {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(15px);
+            border-bottom: 2px solid rgba(88, 101, 242, 0.2);
+        }
+
+        .nav-container {
+            display: flex; justify-content: center; padding: 15px;
+        }
+
+        .nav-link {
+            color: white; text-decoration: none; margin: 0 20px;
+            font-weight: 600; text-transform: uppercase; font-size: 0.9rem;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer; position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--accent);
+            transform: translateY(-3px);
+            text-shadow: 0 0 10px var(--accent);
+        }
+
+        /* Hero Секция */
+        .hero {
+            position: relative; z-index: 10;
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            height: 100vh; text-align: center;
+        }
+
+        .logo-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5.5rem;
+            letter-spacing: 5px;
+            background: linear-gradient(to right, #fff, var(--primary), #fff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* Discord Бутон */
+        .discord-btn {
+            background: linear-gradient(45deg, var(--primary), #4752c4);
+            color: white; text-decoration: none;
+            padding: 22px 60px; border-radius: 12px; font-weight: 900;
+            font-size: 1.5rem; transition: 0.5s;
+            box-shadow: 0 0 25px rgba(88, 101, 242, 0.5);
+            border: none; cursor: pointer;
+            text-transform: uppercase;
+        }
+
+        .discord-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 40px var(--primary);
+            letter-spacing: 2px;
+        }
+
+        /* Прозорци (Modals) */
+        .overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95); z-index: 1000;
+            justify-content: center; align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: #0a0a0f; padding: 40px; border-radius: 25px;
+            border: 2px solid var(--primary); width: 85%; max-width: 500px;
+            text-align: center; box-shadow: 0 0 50px rgba(88, 101, 242, 0.2);
+        }
+
+        .price-card {
+            background: rgba(255,255,255,0.03); padding: 15px; margin: 10px 0;
+            border-radius: 10px; display: flex; justify-content: space-between;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: 0.3s;
+        }
+
+        .price-card:hover { background: rgba(88, 101, 242, 0.1); transform: scale(1.02); }
+
+        .site-patent {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.3); /* Дискретно сиво */
+            background: rgba(0, 0, 0, 0.5); /* Лек фон за четливост */
+            backdrop-filter: blur(5px);
+            z-index: 100;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <canvas id="canvas-stars"></canvas>
+
+    <header>
+        <div class="nav-container">
+            <div class="nav-link" onclick="openModal('shop')">🛒 КУПИ</div>
+            <div class="nav-link" onclick="openModal('rules')">📜 ПРАВИЛА</div>
+            <div class="nav-link" onclick="openModal('links')">🔗 ВРЪЗКИ</div>
+        </div>
+    </header>
+
+    <main class="hero">
+        <h1 class="logo-text">DIVI SELQNI</h1>
+        <p style="color: #888; letter-spacing: 2px; margin-bottom: 40px;">NAI-DOBROTO COMUNITY</p>
+        
+        <a href="https://discord.gg/tzsCX674x4" target="_blank" class="discord-btn">
+            🚀 JOIN DISCORD
+        </a>
+    </main>
+
+    <div id="modal-overlay" class="overlay">
+        <div class="modal-content">
+            <div id="modal-body"></div>
+            <button onclick="closeModal()" style="margin-top:20px; background:none; border:1px solid #444; color:#888; cursor:pointer; padding:5px 15px; border-radius:5px;">Затвори</button>
+        </div>
+    </div>
+
+    <script>
+        /* --- JAVASCRIPT: ДИНАМИКА И ЕФЕКТИ --- */
+
+        // 1. ГАЛАКТИЧЕСКИ ФОН С ЧАСТИЦИ
+        const canvas = document.getElementById('canvas-stars');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function initCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 1; // Малко по-големи за видимост
+                this.speedX = Math.random() * 0.5 - 0.25;
+                this.speedY = Math.random() * 0.5 - 0.25;
+                this.opacity = Math.random();
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                // Ако излезе от екрана, се появява от другата страна
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+            draw() {
+                ctx.fillStyle = `rgba(88, 101, 242, ${this.opacity})`; // Discord синьо с променлива прозрачност
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function createParticles() {
+            for (let i = 0; i < 150; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('resize', initCanvas);
+        initCanvas();
+        createParticles();
+        animate();
+
+        // 2. УПРАВЛЕНИЕ НА ПРОЗОРЦИТЕ
+        const modalData = {
+            shop: `
+                <h2 style="color:var(--primary); font-family:Orbitron;">МАГАЗИН</h2>
+                <div class="price-card"><span>VIP</span> <strong>2 euro.</strong></div>
+                <div class="price-card"><span>Beat</span> <strong>5 euro.</strong></div>
+                <div class="price-card"><span>Teniska - soon...</span> <strong>25 euro.</strong></div>
+                <p style="font-size:0.8rem; color:#555;">Плащания чрез PayPal / Revolut</p>
+            `,
+            rules: `
+                <h2 style="color:var(--accent); font-family:Orbitron;">ПРАВИЛА</h2>
+                <div style="text-align:left; font-size:0.9rem; color:#ccc;">
+                    <center>
+                    <p> soon </p>
+                </div>
+            `,
+            links: `
+                <h2 style="color:#00ffcc; font-family:Orbitron;">ВРЪЗКИ</h2>
+                <div style="display:grid; gap:10px;">
+                    <a href="#" style="color:#fff; text-decoration:none; background:#1a1a2e; padding:10px; border-radius:10px;">TIKTOK</a>
+                    <a href="#" style="color:#fff; text-decoration:none; background:#1a1a2e; padding:10px; border-radius:10px;">YOUTUBE</a>
+                </div>
+            `
+        };
+
+        function openModal(type) {
+            document.getElementById('modal-body').innerHTML = modalData[type];
+            document.getElementById('modal-overlay').style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').style.display = 'none';
+        }
+    </script>
+     
+<footer class="site-patent">
+    © 2026 Divi Selqni Community | Всички права запазени
+</footer>
+</body>
+</html>
