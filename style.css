@@ -16,8 +16,7 @@ html {
     font-family: 'Poppins', sans-serif;
     color: white;
     overflow: hidden;
-    cursor: crosshair;
-    /* Променя мишката на мерник за геймърско усещане */
+    cursor: default;
 }
 
 /* Анимиран Фон */

@@ -189,9 +189,9 @@ window.onAuthStateChanged(window.auth, async (user) => {
 
 function handleAuthClick() {
     if (currentUser) {
-        showProfile(currentUser.uid);
+        window.location.href = "profile.html";
     } else {
-        openRegister();
+        window.location.href = "login.html";
     }
 }
 
