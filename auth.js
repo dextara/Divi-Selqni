@@ -1,36 +1,40 @@
-async function register() {
+import { auth, db } from "./firebase.js";
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+import {
+    doc,
+    setDoc
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+window.register = async () => {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     const username = document.getElementById("username").value;
 
-    try {
-        const userCredential = await window.createUserWithEmailAndPassword(window.auth, email, password);
-        const user = userCredential.user;
+    const userCred = await createUserWithEmailAndPassword(auth, email, password);
 
-        await window.setDoc(window.doc(window.db, "users", user.uid), {
-            username,
-            email,
-            createdAt: new Date()
-        });
+    await setDoc(doc(db, "users", userCred.user.uid), {
+        username,
+        email,
+        role: "user",
+        createdAt: new Date()
+    });
 
-        window.location.href = "dashboard.html";
-    } catch (error) {
-        alert(error.message);
-    }
-}
 
-async function login() {
+    window.location.href = "dashboard.html";
+};
+
+window.login = async () => {
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
 
-    try {
-        await window.signInWithEmailAndPassword(window.auth, email, password);
-        window.location.href = "dashboard.html";
-    } catch (error) {
-        alert(error.message);
-    }
-}
+    await signInWithEmailAndPassword(auth, email, password);
+    window.location.href = "dashboard.html";
+};
 
-function goHome() {
+window.goHome = () => {
     window.location.href = "index.html";
-}
+};
