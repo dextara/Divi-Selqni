@@ -181,7 +181,7 @@ window.onAuthStateChanged(window.auth, async (user) => {
 
     if (user) {
         currentUser = user;
-        if (authBtn) authBtn.innerText = "PROFILE";
+        if (authBtn) authBtn.innerText = "ACCOUNT";
         if (userInfo) {
             // Get user data
             const docRef = window.doc(window.db, "users", user.uid);
