@@ -437,3 +437,53 @@ button:hover {
     box-shadow: 0 0 40px var(--primary);
     letter-spacing: 2px;
 }
+
+
+.content-card {
+    background: #ffffff;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    width: 300px;
+}
+
+.content-card h1 {
+    margin-bottom: 25px;
+    color: #333;
+}
+
+.content-card a {
+    display: block;
+    text-decoration: none;
+    margin: 12px 0;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: bold;
+    transition: 0.3s ease;
+    color: white;
+}
+
+/* Discord */
+.content-card a:nth-child(2) {
+    background: #5865F2;
+}
+
+/* Instagram */
+.content-card a:nth-child(3) {
+    background: linear-gradient(45deg, #feda75, #d62976, #962fbf, #4f5bd5);
+}
+
+/* GitHub */
+.content-card a:nth-child(4) {
+    background: #24292e;
+}
+
+/* Email */
+.content-card a:nth-child(5) {
+    background: #ff4d4d;
+}
+
+.content-card a:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
