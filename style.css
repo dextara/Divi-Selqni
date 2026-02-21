@@ -442,9 +442,10 @@ button:hover {
 .content-card {
     background: #242323;
     padding: 40px;
+    margin: 10px 0;
     border-radius: 20px;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-    width: 300px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
 }
 
 .content-card h1 {
