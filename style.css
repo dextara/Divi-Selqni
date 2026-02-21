@@ -395,19 +395,15 @@ button:hover {
 
 .buy-btn {
     display: inline-block;
-    padding: 12px 24px;
+    padding: 12px 22px;
     background-color: #635BFF;
     color: white;
     text-decoration: none;
     border-radius: 8px;
     font-weight: bold;
-    font-family: Arial, sans-serif;
-
-    /* важно за анимацията */
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* уголемяване при hover */
 .buy-btn:hover {
     transform: scale(1.08);
     box-shadow: 0 0 15px rgba(99, 91, 255, 0.5);
