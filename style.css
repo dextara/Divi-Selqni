@@ -444,7 +444,6 @@ body {
     display: flex;
     justify-content: center; /* хоризонтално */
     align-items: center;     /* вертикално */
-    background: #1a1a1a;     /* по желание */
 }
 
 .content-card {
