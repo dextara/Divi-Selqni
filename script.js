@@ -287,7 +287,3 @@ function logout() {
     window.signOut(window.auth);
     closeModal();
 }
-
-function toggleMenu() {
-    document.getElementById("navLinks").classList.toggle("active");
-}
