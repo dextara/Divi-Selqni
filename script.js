@@ -48,6 +48,12 @@ function animate() {
 window.addEventListener('resize', initCanvas);
 initCanvas();
 createParticles();
+
+// Hamburger menu toggle
+window.toggleMenu = () => {
+    const navMenu = document.querySelector('.nav-menu');
+    navMenu.classList.toggle('show');
+};
 animate();
 
 
