@@ -44,6 +44,7 @@ onAuthStateChanged(auth, async (user) => {
 
     container.innerHTML = `
         <h1>👑 ADMIN PANEL</h1>
+        <button onclick="logout()">🚪 Logout</button>
         ${usersHTML}
     `;
 

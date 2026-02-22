@@ -1,7 +1,9 @@
 import { auth, db } from "./firebase.js";
 import {
     createUserWithEmailAndPassword,
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword,
+    onAuthStateChanged,
+    signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 import {
@@ -38,3 +40,27 @@ window.login = async () => {
 window.goHome = () => {
     window.location.href = "index.html";
 };
+
+window.logout = async () => {
+    await signOut(auth);
+    window.location.href = "index.html";
+};
+
+// Функция за проверка на аутентикация и обновяване на UI
+window.checkAuth = () => {
+    onAuthStateChanged(auth, (user) => {
+        const authButton = document.getElementById("auth-button");
+        if (authButton) {
+            if (user) {
+                authButton.textContent = "👤 Dashboard";
+                authButton.onclick = () => window.location.href = "dashboard.html";
+            } else {
+                authButton.textContent = "👤 Login";
+                authButton.onclick = () => window.location.href = "login.html";
+            }
+        }
+    });
+};
+
+// Автоматично извикване при зареждане на страницата
+window.addEventListener('DOMContentLoaded', checkAuth);

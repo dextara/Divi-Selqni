@@ -1,12 +1,12 @@
 import { auth, db } from "./firebase.js";
-import { 
+import {
     onAuthStateChanged,
-    signOut 
+    signOut
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-import { 
-    doc, 
-    getDoc 
+import {
+    doc,
+    getDoc
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const container = document.getElementById("dashboard-container");
@@ -31,9 +31,8 @@ onAuthStateChanged(auth, async (user) => {
         </div>
     `;
 
-    document.getElementById("logoutNav").onclick = async () => {
-        await signOut(auth);
-        window.location.href = "login.html";
-    };
+    const userInfo = document.getElementById("user-info");
+    userInfo.innerHTML = `<span onclick="logout()">🚪 Logout</span>`;
+    userInfo.classList.add("nav-link");
 
 });
