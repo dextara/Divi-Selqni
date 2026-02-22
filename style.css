@@ -39,8 +39,12 @@ header {
 
 .nav-container {
     display: flex;
-    justify-content: center;
+    align-items: center;
     padding: 15px;
+}
+
+#auth-button {
+    margin-left: auto;
 }
 
 .nav-link {
